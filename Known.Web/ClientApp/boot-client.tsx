@@ -28,7 +28,7 @@ function renderApp() {
                 <ConnectedRouter history={ history } children={ routes } />
             </Provider>
         </AppContainer>,
-        document.getElementById('react-app')
+        document.getElementById('app')
     );
 }
 
