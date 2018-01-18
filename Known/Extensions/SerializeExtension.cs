@@ -8,27 +8,13 @@ using System.Xml.Serialization;
 
 namespace Known.Extensions
 {
-    /// <summary>
-    /// 对象序列化扩展类。
-    /// </summary>
     public static class SerializeExtension
     {
-        /// <summary>
-        /// 将对象序列化成JSON格式字符串。
-        /// </summary>
-        /// <param name="value">对象。</param>
-        /// <returns>JSON格式字符串。</returns>
         public static string ToJson(this object value)
         {
             return JsonConvert.SerializeObject(value);
         }
 
-        /// <summary>
-        /// 将JSON格式字符串反序列化成指定类型的对象。
-        /// </summary>
-        /// <typeparam name="T">对象类型。</typeparam>
-        /// <param name="json">JSON格式字符串。</param>
-        /// <returns>指定类型对象。</returns>
         public static T FromJson<T>(this string json)
         {
             var settings = new JsonSerializerSettings
@@ -38,11 +24,6 @@ namespace Known.Extensions
             return JsonConvert.DeserializeObject<T>(json, settings);
         }
 
-        /// <summary>
-        /// 将对象序列化成XML格式字符串。
-        /// </summary>
-        /// <param name="value">对象。</param>
-        /// <returns>XML格式字符串。</returns>
         public static string ToXml(this object value)
         {
             if (value == null)
@@ -74,12 +55,6 @@ namespace Known.Extensions
             }
         }
 
-        /// <summary>
-        /// 将XML格式字符串反序列化成指定类型的对象。
-        /// </summary>
-        /// <typeparam name="T">对象类型。</typeparam>
-        /// <param name="json">XML格式字符串。</param>
-        /// <returns>指定类型对象。</returns>
         public static T FromXml<T>(this string xml) where T : class
         {
             if (string.IsNullOrEmpty(xml))
@@ -93,11 +68,6 @@ namespace Known.Extensions
             }
         }
 
-        /// <summary>
-        /// 将对象序列化成字节数组。
-        /// </summary>
-        /// <param name="value">对象。</param>
-        /// <returns>字节数组。</returns>
         public static byte[] ToBytes(this object value)
         {
             if (value == null)
@@ -115,11 +85,6 @@ namespace Known.Extensions
             return bytes;
         }
 
-        /// <summary>
-        /// 将字节数组反序列化成对象。
-        /// </summary>
-        /// <param name="buffer">字节数组。</param>
-        /// <returns>对象。</returns>
         public static object FromBytes(this byte[] buffer)
         {
             if (buffer == null)

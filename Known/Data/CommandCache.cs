@@ -3,36 +3,18 @@ using Known.Mapping;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 
 namespace Known.Data
 {
-    /// <summary>
-    /// 数据库栏位信息。
-    /// </summary>
     class ColumnInfo
     {
-        /// <summary>
-        /// 取得或设置是否是主键。
-        /// </summary>
         public bool IsKey { get; set; }
-        
-        /// <summary>
-        /// 取得或设置栏位名。
-        /// </summary>
         public string ColumnName { get; set; }
-
-        /// <summary>
-        /// 取得或设置栏位对应的实体属性。
-        /// </summary>
         public PropertyInfo Property { get; set; }
 
-        /// <summary>
-        /// 获取实体属性映射的数据库栏位名。
-        /// </summary>
-        /// <param name="property">实体属性。</param>
-        /// <returns></returns>
         public static string GetColumnName(PropertyInfo property)
         {
             var attr = property.GetAttribute<ColumnAttribute>();
@@ -43,21 +25,12 @@ namespace Known.Data
         }
     }
 
-    /// <summary>
-    /// 数据库命令缓存类。
-    /// </summary>
     public class CommandCache
     {
         private static readonly ConcurrentDictionary<string, IEnumerable<PropertyInfo>> CachedProperties = new ConcurrentDictionary<string, IEnumerable<PropertyInfo>>();
         private static readonly ConcurrentDictionary<RuntimeTypeHandle, TableAttribute> TypeTableAttributes = new ConcurrentDictionary<RuntimeTypeHandle, TableAttribute>();
         private static readonly ConcurrentDictionary<RuntimeTypeHandle, IEnumerable<ColumnInfo>> TypeColumnNames = new ConcurrentDictionary<RuntimeTypeHandle, IEnumerable<ColumnInfo>>();
 
-        /// <summary>
-        /// 根据SQL获取缓存的数据库命令。
-        /// </summary>
-        /// <param name="sql">SQL语句。</param>
-        /// <param name="param">语句参数。</param>
-        /// <returns></returns>
         public static Command GetCommand(string sql, object param = null)
         {
             var command = new Command(sql);
@@ -78,12 +51,6 @@ namespace Known.Data
             return command;
         }
 
-        /// <summary>
-        /// 根据实体对象获取保存命令。
-        /// </summary>
-        /// <typeparam name="T">实体对象类型。</typeparam>
-        /// <param name="entity">实体对象。</param>
-        /// <returns></returns>
         public static Command GetSaveCommand<T>(T entity) where T : EntityBase
         {
             var type = typeof(T);
@@ -123,12 +90,6 @@ namespace Known.Data
             }
         }
 
-        /// <summary>
-        /// 根据实体对象获取删除命令。
-        /// </summary>
-        /// <typeparam name="T">实体对象类型。</typeparam>
-        /// <param name="entity">实体对象。</param>
-        /// <returns></returns>
         public static Command GetDeleteCommand<T>(T entity) where T : EntityBase
         {
             var type = typeof(T);
@@ -141,6 +102,15 @@ namespace Known.Data
                 command.AddParameter(item.ColumnName, item.Property.GetValue(entity));
             }
             return command;
+        }
+
+        public static Command GetInsertCommand(DataTable table)
+        {
+            var columns = table.Columns.OfType<DataColumn>().Select(c => c.ColumnName);
+            var columnSql = string.Join(",", columns.Select(k => k));
+            var valueSql = string.Join(",", columns.Select(k => string.Format("@{0}", k)));
+            var text = string.Format("insert into {0}({1}) values({2})", table.TableName, columnSql, valueSql);
+            return new Command(text);
         }
 
         private static IEnumerable<ColumnInfo> GetCachedColumnInfos(Type type)

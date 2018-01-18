@@ -4,14 +4,8 @@ using System.Collections.Generic;
 
 namespace Known.Mapping
 {
-    /// <summary>
-    /// 实体基类。
-    /// </summary>
     public class EntityBase
     {
-        /// <summary>
-        /// 构造函数。
-        /// </summary>
         public EntityBase()
         {
             IsNew = true;
@@ -19,10 +13,6 @@ namespace Known.Mapping
 
         internal bool IsNew { get; set; }
 
-        /// <summary>
-        /// 验证实体数据。
-        /// </summary>
-        /// <returns>验证器。</returns>
         public Validator Validate()
         {
             var errors = new List<string>();

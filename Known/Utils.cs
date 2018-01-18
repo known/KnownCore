@@ -5,37 +5,19 @@ using System.Text;
 
 namespace Known
 {
-    /// <summary>
-    /// 效用类。
-    /// </summary>
     public class Utils
     {
         #region Base
-        /// <summary>
-        /// 取得新的GUID。
-        /// </summary>
         public static string NewGuid
         {
             get { return Guid.NewGuid().ToString().ToLower().Replace("-", ""); }
         }
 
-        /// <summary>
-        /// 判断对象值是否为空或空字符串。
-        /// </summary>
-        /// <param name="value">对象值。</param>
-        /// <returns>为空或空字符串返回true，否则返回false。</returns>
         public static bool IsNullOrEmpty(object value)
         {
             return value == null || value == DBNull.Value || string.IsNullOrWhiteSpace(value.ToString());
         }
 
-        /// <summary>
-        /// 转换数据类型。
-        /// </summary>
-        /// <typeparam name="T">转换目标类型。</typeparam>
-        /// <param name="value">转换值（字符，数值，布林，枚举）。</param>
-        /// <param name="defaultValue">转换为空时的默认值。</param>
-        /// <returns>转换后的值。</returns>
         public static T ConvertTo<T>(object value, T defaultValue = default(T))
         {
             if (value == null || value == DBNull.Value)
@@ -71,11 +53,6 @@ namespace Known
         #endregion
 
         #region Encrypt
-        /// <summary>
-        /// 将字符串加密成MD5格式。
-        /// </summary>
-        /// <param name="value">字符串。</param>
-        /// <returns>加密字符串。</returns>
         public static string ToMd5(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -95,12 +72,6 @@ namespace Known
             return sb.ToString();
         }
 
-        /// <summary>
-        /// 以DES方式加密字符串。
-        /// </summary>
-        /// <param name="value">字符串。</param>
-        /// <param name="password">加密密码。</param>
-        /// <returns>加密字符串。</returns>
         public static string Encrypt(string value, string password = "")
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -113,12 +84,6 @@ namespace Known
             return Convert.ToBase64String(bytes);
         }
 
-        /// <summary>
-        /// 以DES方式解密字符串。
-        /// </summary>
-        /// <param name="value">加密字符串。</param>
-        /// <param name="password">解密密码。</param>
-        /// <returns>字符串。</returns>
         public static string Decrypt(string value, string password = "")
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -133,11 +98,6 @@ namespace Known
         #endregion
 
         #region File
-        /// <summary>
-        /// 确信文件路径存在，若不存在，则自动创建。
-        /// </summary>
-        /// <param name="fileName">文件路径。</param>
-        /// <returns>安全可用的文件路径。</returns>
         public static string EnsureFile(string fileName)
         {
             var fileInfo = new FileInfo(fileName);
@@ -147,10 +107,6 @@ namespace Known
             return fileName;
         }
 
-        /// <summary>
-        /// 删除文件。
-        /// </summary>
-        /// <param name="fileName">文件路径。</param>
         public static void DeleteFile(string fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName))
@@ -160,11 +116,6 @@ namespace Known
                 File.Delete(fileName);
         }
 
-        /// <summary>
-        /// 获取文件扩展名。
-        /// </summary>
-        /// <param name="fileName">文件路径。</param>
-        /// <returns>文件扩展名。</returns>
         public static string GetFileExtName(string fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName))
