@@ -2,6 +2,10 @@
     margin-right: 10px;
 }
 
+.navbar-inverse {
+    background-color: #001529;
+}
+
 /* Highlighting rules for nav menu items */
 .main-nav li a.active,
 .main-nav li a.active:hover,
