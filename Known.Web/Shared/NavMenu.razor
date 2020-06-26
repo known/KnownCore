@@ -1,0 +1,42 @@
+﻿
+<ul class="nav">
+    @foreach (var item in Items)
+    {
+        if (item.Items.Any())
+        {
+            <li class="nav-item">
+                <a href="#">
+                    <i class="@item.Icon"></i>
+                    <span>@item.Text</span>
+                    <span class="oi oi-chevron-left"></span>
+                </a>
+                <ul class="nav">
+                    @foreach (var sub in item.Items)
+                    {
+                        <li class="nav-item">
+                            <a href="@sub.Url">
+                                <i class="@sub.Icon"></i>
+                                <span>@sub.Text</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <NavLink href="@item.Url">
+                    <i class="@item.Icon"></i>
+                    <span>@item.Text</span>
+                </NavLink>
+            </li>
+        }
+        
+    }
+</ul>
+
+@code {
+    [Parameter]
+    public IEnumerable<MenuItem> Items { get; set; } = new MenuItem[0];
+}
